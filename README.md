@@ -8,7 +8,7 @@
 git clone https://github.com/ultralytics/yolov5.git
 ```
 
-2. touch 모델 준비. `(./models/)`
+2. touch 모델 준비. (`./models/`)
 
 3. venv Activate
 
