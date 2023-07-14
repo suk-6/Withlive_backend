@@ -1,0 +1,6 @@
+services:
+  server:
+    build: .
+    container_name: Withlive_backend
+    ports:
+      - "20000:20000"
