@@ -7,6 +7,7 @@ import base64
 from PIL import Image
 import numpy as np
 import json
+from datetime import datetime
 
 
 # YOLO 모델과 가중치 로드
@@ -41,6 +42,7 @@ async def server_handler(websocket, path):
         sendData = json.dumps(annos)
 
         print(sendData)
+        print(datetime.now())
 
         # 객체인식 정보 전송
         await websocket.send(sendData)

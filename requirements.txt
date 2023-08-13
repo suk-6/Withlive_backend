@@ -11,6 +11,7 @@ click==8.1.4
 cmake==3.26.4
 contourpy==1.1.0
 cycler==0.10.0
+DateTime==5.2
 Django==4.2.3
 filelock==3.12.2
 fire==0.5.0
@@ -94,3 +95,4 @@ websockets==11.0.3
 Werkzeug==2.3.6
 wget==3.2
 yolov5==7.0.12
+zope.interface==6.0

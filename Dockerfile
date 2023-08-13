@@ -14,6 +14,7 @@ COPY src/ .
 RUN apt update && apt install libgl1-mesa-glx ffmpeg libsm6 libxext6 -y
 RUN pip install -r requirements.txt
 RUN git clone https://github.com/ultralytics/yolov5
+RUN pip install -r ./yolov5/requirements.txt
 
 EXPOSE 20000
 
