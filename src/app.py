@@ -9,7 +9,6 @@ import numpy as np
 import json
 from datetime import datetime
 
-
 # YOLO 모델과 가중치 로드
 model = torch.hub.load('./yolov5', 'custom', path='./models/230218.pt', source='local', force_reload=True)
 
@@ -18,7 +17,7 @@ HOST = '0.0.0.0'  # 호스트 주소
 PORT = 20000  # 포트 번호
 
 # 웹 소켓 서버 핸들러
-async def server_handler(websocket, path):
+async def serverHandler(websocket, path):
     while True:
         # 클라이언트로부터 프레임 수신
         frameBase64 = await websocket.recv()
@@ -48,7 +47,7 @@ async def server_handler(websocket, path):
         await websocket.send(sendData)
 
 # Websocket Server
-server = websockets.serve(server_handler, HOST, PORT)
+server = websockets.serve(serverHandler, HOST, PORT)
 print(f'Host: {HOST}, Port: {PORT}')
 
 # Loop
