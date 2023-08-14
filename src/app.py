@@ -46,14 +46,17 @@ async def serverHandler(websocket, path):
             yCenter = (ymin + ymax) / 2
 
             # 바운딩 박스 위치 계산
-            if xCenter < imageWidth / 2 and yCenter > imageHeight / 2: # 왼쪽 위
+            if xCenter < imageWidth / 2 and yCenter < imageHeight / 2: # 왼쪽 위
                 bboxCoords['position'] = 0
-            elif xCenter > imageWidth / 2 and yCenter > imageHeight / 2: # 오른쪽 위
+            elif xCenter > imageWidth / 2 and yCenter < imageHeight / 2: # 오른쪽 위
                 bboxCoords['position'] = 1
-            elif xCenter < imageWidth / 2 and yCenter < imageHeight / 2: # 왼쪽 아래
+            elif xCenter < imageWidth / 2 and yCenter > imageHeight / 2: # 왼쪽 아래
                 bboxCoords['position'] = 2
-            elif xCenter > imageWidth / 2 and yCenter < imageHeight / 2: # 오른쪽 아래
+            elif xCenter > imageWidth / 2 and yCenter > imageHeight / 2: # 오른쪽 아래
                 bboxCoords['position'] = 3
+            else:
+                bboxCoords['position'] = -1
+
 
             # 바운딩 박스의 크기 비율 계산
             bboxWidth = xmax - xmin
