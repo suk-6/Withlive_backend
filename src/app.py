@@ -33,15 +33,35 @@ async def serverHandler(websocket, path):
         # 객체인식 정보 추출
         annos = []
 
+        imageWidth = frameNp.shape[1]
+        imageHeight = frameNp.shape[0]
+        imageArea = imageWidth * imageHeight
+
         for bbox in zip(results.xyxy[0]):
             xmin, ymin, xmax, ymax, conf, label = bbox[0].tolist()
-            bboxCoords = {'xmin': xmin, 'ymin': ymin, 'xmax': xmax, 'ymax': ymax, 'conf': conf, "label": int(label)}
+            bboxCoords = {'requestTime': datetime.now(), 'xmin': xmin, 'ymin': ymin, 'xmax': xmax, 'ymax': ymax, 'conf': conf, "label": int(label)}
+
+            xCenter = (xmin + xmax) / 2
+
+            # 바운딩 박스 위치 계산
+            if xCenter < imageWidth / 2:
+                bboxCoords['position'] = 'left'
+            else:
+                bboxCoords['position'] = 'right'
+
+            # 바운딩 박스의 크기 비율 계산
+            bboxWidth = xmax - xmin
+            bboxHeight = ymax - ymin
+            bboxArea = bboxWidth * bboxHeight
+            bboxRatio = (bboxArea / imageArea) * 100  # 퍼센트로 표현
+
+            bboxCoords['ratio'] = bboxRatio
+
             annos.append(bboxCoords)
 
         sendData = json.dumps(annos)
 
         print(sendData)
-        print(datetime.now())
 
         # 객체인식 정보 전송
         await websocket.send(sendData)
