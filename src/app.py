@@ -21,6 +21,7 @@ async def serverHandler(websocket, path):
     while True:
         # 클라이언트로부터 프레임 수신
         frameBase64 = await websocket.recv()
+        now = datetime.now()
 
         # 프레임 디코딩 및 처리
         frameData = base64.b64decode(frameBase64)
@@ -39,7 +40,7 @@ async def serverHandler(websocket, path):
 
         for bbox in zip(results.xyxy[0]):
             xmin, ymin, xmax, ymax, conf, label = bbox[0].tolist()
-            bboxCoords = {'requestTime': datetime.now(), 'xmin': xmin, 'ymin': ymin, 'xmax': xmax, 'ymax': ymax, 'conf': conf, "label": int(label)}
+            bboxCoords = {'requestTime': now.strftime('%Y-%m-%d_%H:%M:%S'), 'xmin': xmin, 'ymin': ymin, 'xmax': xmax, 'ymax': ymax, 'conf': conf, "label": int(label)}
 
             xCenter = (xmin + xmax) / 2
 
