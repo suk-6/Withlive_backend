@@ -8,6 +8,7 @@ from PIL import Image
 import numpy as np
 import json
 from datetime import datetime
+import logging
 
 # YOLO 모델과 가중치 로드
 model = torch.hub.load('./yolov5', 'custom', path='./models/230218.pt', source='local', force_reload=True)
@@ -15,6 +16,10 @@ model = torch.hub.load('./yolov5', 'custom', path='./models/230218.pt', source='
 # 웹 소켓 서버 정보
 HOST = '0.0.0.0'  # 호스트 주소
 PORT = 20000  # 포트 번호
+
+#LOGGER
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+LOGGER = logging.getLogger()
 
 # 웹 소켓 서버 핸들러
 async def serverHandler(websocket, path):
@@ -70,7 +75,7 @@ async def serverHandler(websocket, path):
 
         sendData = json.dumps(annos, default=str)
 
-        print(sendData)
+        LOGGER.info(sendData)
 
         # 객체인식 정보 전송
         await websocket.send(sendData)
