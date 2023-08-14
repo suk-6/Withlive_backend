@@ -59,7 +59,7 @@ async def serverHandler(websocket, path):
 
             annos.append(bboxCoords)
 
-        sendData = json.dumps(annos)
+        sendData = json.dumps(annos, default=str)
 
         print(sendData)
 
