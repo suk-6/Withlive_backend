@@ -95,8 +95,7 @@ async def serverHandler(websocket, path):
         await websocket.send(sendData)
 
         # 이미지 저장
-        timeStamp = now.strftime('%Y-%m-%d_%H-%M-%S')
-        imageFilename = os.path.join(imageFolder, f'image_{timeStamp}.jpg')
+        imageFilename = os.path.join(imageFolder, f"image_{now.strftime('%Y-%m-%d_%H:%M:%S')}.jpg")
         cv2.imwrite(imageFilename, frameCopy)
 
         # 이미지 개수가 100개를 초과하면 가장 오래된 이미지 삭제
