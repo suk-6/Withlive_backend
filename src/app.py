@@ -9,6 +9,7 @@ import numpy as np
 import json
 from datetime import datetime
 import logging
+import os
 
 # YOLO 모델과 가중치 로드
 model = torch.hub.load('./yolov5', 'custom', path='./models/230218.pt', source='local', force_reload=True)
@@ -17,9 +18,19 @@ model = torch.hub.load('./yolov5', 'custom', path='./models/230218.pt', source='
 HOST = '0.0.0.0'  # 호스트 주소
 PORT = 20000  # 포트 번호
 
-#LOGGER
+# LOGGER
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 LOGGER = logging.getLogger()
+
+# 바운딩 박스 설정
+color = (0, 255, 0)
+thickness = 2
+
+# 바운딩 박스 이미지 저장
+imageFolder = "./save-images"
+
+if not os.path.exists(imageFolder):
+    os.makedirs(imageFolder)
 
 # 웹 소켓 서버 핸들러
 async def serverHandler(websocket, path):
@@ -32,6 +43,7 @@ async def serverHandler(websocket, path):
         frameData = base64.b64decode(frameBase64)
         frameNp = cv2.imdecode(np.frombuffer(frameData, np.uint8), cv2.IMREAD_COLOR)
         framePil = Image.fromarray(frameNp)
+        frameCopy = frameNp.copy()
 
         # 객체 탐지 수행
         results = model(framePil)
@@ -73,12 +85,28 @@ async def serverHandler(websocket, path):
 
             annos.append(bboxCoords)
 
+            cv2.rectangle(frameCopy, (int(xmin), int(ymin)), (int(xmax), int(ymax)), color, thickness)
+
         sendData = json.dumps(annos, default=str)
 
         LOGGER.info(sendData)
 
         # 객체인식 정보 전송
         await websocket.send(sendData)
+
+        # 이미지 저장
+        timeStamp = now.strftime('%Y-%m-%d_%H-%M-%S')
+        imageFilename = os.path.join(imageFolder, f'image_{timeStamp}.jpg')
+        cv2.imwrite(imageFilename, frameCopy)
+
+        # 이미지 개수가 100개를 초과하면 가장 오래된 이미지 삭제
+        if len(os.listdir(imageFolder)) > 100:
+            # 저장된 이미지 파일 목록 가져오기
+            imageFiles = sorted(os.listdir(imageFolder))
+            
+            # 가장 오래된 이미지 삭제
+            oldestImage = os.path.join(imageFolder, imageFiles[0])
+            os.remove(oldestImage)
 
 # Websocket Server
 server = websockets.serve(serverHandler, HOST, PORT)
