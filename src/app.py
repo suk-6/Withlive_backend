@@ -32,6 +32,9 @@ imageFolder = "./save-images"
 if not os.path.exists(imageFolder):
     os.makedirs(imageFolder)
 
+# 이미지 카운터
+imageCounter = len(os.listdir(imageFolder))
+
 # 웹 소켓 서버 핸들러
 async def serverHandler(websocket, path):
     while True:
@@ -43,7 +46,6 @@ async def serverHandler(websocket, path):
         frameData = base64.b64decode(frameBase64)
         frameNp = cv2.imdecode(np.frombuffer(frameData, np.uint8), cv2.IMREAD_COLOR)
         framePil = Image.fromarray(frameNp)
-        frameCopy = frameNp.copy()
 
         # 객체 탐지 수행
         results = model(framePil)
@@ -85,7 +87,7 @@ async def serverHandler(websocket, path):
 
             annos.append(bboxCoords)
 
-            cv2.rectangle(frameCopy, (int(xmin), int(ymin)), (int(xmax), int(ymax)), color, thickness)
+            cv2.rectangle(frameNp, (int(xmin), int(ymin)), (int(xmax), int(ymax)), color, thickness)
 
         sendData = json.dumps(annos, default=str)
 
@@ -95,17 +97,21 @@ async def serverHandler(websocket, path):
         await websocket.send(sendData)
 
         # 이미지 저장
-        imageFilename = os.path.join(imageFolder, f"image_{now.strftime('%Y-%m-%d_%H:%M:%S')}.jpg")
-        cv2.imwrite(imageFilename, frameCopy)
+        timeStamp = now.strftime('%Y-%m-%d_%H-%M-%S')
+        imageFilename = os.path.join(imageFolder, f'image_{timeStamp}.jpg')
+        cv2.imwrite(imageFilename, frameNp)
+        imageCounter += 1
 
         # 이미지 개수가 100개를 초과하면 가장 오래된 이미지 삭제
-        if len(os.listdir(imageFolder)) > 100:
+        if imageCounter > 100:
             # 저장된 이미지 파일 목록 가져오기
             imageFiles = sorted(os.listdir(imageFolder))
             
             # 가장 오래된 이미지 삭제
             oldestImage = os.path.join(imageFolder, imageFiles[0])
             os.remove(oldestImage)
+
+            imageCounter -= 1
 
 # Websocket Server
 server = websockets.serve(serverHandler, HOST, PORT)
