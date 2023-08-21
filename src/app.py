@@ -32,11 +32,10 @@ imageFolder = "./save-images"
 if not os.path.exists(imageFolder):
     os.makedirs(imageFolder)
 
-# 이미지 카운터
-imageCounter = len(os.listdir(imageFolder))
-
 # 웹 소켓 서버 핸들러
 async def serverHandler(websocket, path):
+    # 이미지 카운터
+    imageCounter = len(os.listdir(imageFolder))
     while True:
         # 클라이언트로부터 프레임 수신
         frameBase64 = await websocket.recv()
