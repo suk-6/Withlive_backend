@@ -34,3 +34,20 @@ pip install -r requirements.txt
 ```bash
 python3 app.py
 ```
+
+## Docker Start
+
+1. Withlive_backend Repository 복사
+   
+```bash
+git clone https://github.com/suk-6/Withlive_backend.git
+cd Withlive_backend
+```
+
+2. touch 모델 준비 (`./models/`)
+
+3. Docker Build
+
+```bash
+docker-compose up -d --build
+```
