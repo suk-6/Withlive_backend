@@ -58,7 +58,7 @@ async def serverHandler(websocket, path):
 
         for bbox in zip(results.xyxy[0]):
             xmin, ymin, xmax, ymax, conf, label = bbox[0].tolist()
-            bboxCoords = {'requestTime': now.strftime('%Y-%m-%d_%H:%M:%S'), 'xmin': xmin, 'ymin': ymin, 'xmax': xmax, 'ymax': ymax, 'conf': conf, "label": int(label)}
+            bboxCoords = {'requestTime': now.strftime('%Y-%m-%d_%H:%M:%S'), 'xmin': xmin, 'ymin': ymin, 'xmax': xmax, 'ymax': ymax, 'conf': conf, "label": int(label), 'position': -1, 'ratio': -1, 'width': imageWidth, 'height': imageHeight}
 
             xCenter = (xmin + xmax) / 2
             yCenter = (ymin + ymax) / 2
