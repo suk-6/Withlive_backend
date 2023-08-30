@@ -12,7 +12,7 @@ import logging
 import os
 
 # YOLO 모델과 가중치 로드
-model = torch.hub.load('./yolov5', 'custom', path='./models/230218.pt', source='local', force_reload=True)
+model = torch.hub.load('.', 'custom', path='./models/230218.pt', source='local', force_reload=True)
 
 # 웹 소켓 서버 정보
 HOST = '0.0.0.0'  # 호스트 주소
