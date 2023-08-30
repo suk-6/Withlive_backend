@@ -10,7 +10,7 @@ COPY requirements.txt ../
 COPY src/app.py .
 COPY src/models/ ./models/
 
-RUN pip install -r ../requirements.txt
+RUN pip install websockets
 
 EXPOSE 20000
 
