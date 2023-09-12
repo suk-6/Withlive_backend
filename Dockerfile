@@ -6,7 +6,6 @@ ENV LC_CTYPE C.UTF-8
 
 LABEL maintainer="https://suk.kr"
 
-COPY requirements.txt ../
 COPY src/app.py .
 COPY src/models/ ./models/
 
