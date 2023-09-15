@@ -6,11 +6,11 @@ services:
       - "20000:20000"
 
   privacy:
-    image: nginx
+    image: httpd:2.4
     ports:
         - 20001:80
     volumes:
-        - ./privacy:/usr/share/nginx/html
+        - ./privacy:/usr/local/apache2/htdocs/
     healthcheck:
         test: curl --fail http://localhost || exit 1
         interval: 60s
