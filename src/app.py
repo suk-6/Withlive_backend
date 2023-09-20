@@ -110,21 +110,21 @@ async def serverHandler(websocket, path):
         await websocket.send(sendData)
 
         # 이미지 저장
-        timeStamp = now.strftime('%Y-%m-%d_%H-%M-%S')
-        imageFilename = os.path.join(imageFolder, f'image_{timeStamp}.jpg')
+        # timeStamp = now.strftime('%Y-%m-%d_%H-%M-%S')
+        # imageFilename = os.path.join(imageFolder, f'image_{timeStamp}.jpg')
         #cv2.imwrite(imageFilename, frameNp, [cv2.IMWRITE_JPEG_QUALITY, 40])
-        imageCounter += 1
+        # imageCounter += 1
 
-        # 이미지 개수가 100개를 초과하면 가장 오래된 이미지 삭제
-        if imageCounter > 100:
-            # 저장된 이미지 파일 목록 가져오기
-            imageFiles = sorted(os.listdir(imageFolder))
+        # # 이미지 개수가 100개를 초과하면 가장 오래된 이미지 삭제
+        # if imageCounter > 100:
+        #     # 저장된 이미지 파일 목록 가져오기
+        #     imageFiles = sorted(os.listdir(imageFolder))
             
-            # 가장 오래된 이미지 삭제
-            oldestImage = os.path.join(imageFolder, imageFiles[0])
-            os.remove(oldestImage)
+        #     # 가장 오래된 이미지 삭제
+        #     oldestImage = os.path.join(imageFolder, imageFiles[0])
+        #     os.remove(oldestImage)
 
-            imageCounter -= 1
+        #     imageCounter -= 1
 
 # Websocket Server
 server = websockets.serve(serverHandler, HOST, PORT)
