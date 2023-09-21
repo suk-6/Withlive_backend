@@ -97,7 +97,7 @@ async def serverHandler(websocket, path):
             bboxRatio = (bboxArea / imageArea) * 100  # 퍼센트로 표현
 
             bboxCoords['ratio'] = bboxRatio
-            bboxCoords['power'] = 1 + (bboxRatio / 100) * (255 - 1) # 진동 세기
+            bboxCoords['power'] = int(1 + (bboxRatio / 100) * (255 - 1)) # 진동 세기
 
             annos.append(bboxCoords)
 
